@@ -1,7 +1,9 @@
 "use client";
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactNode } from "react";
+import { RecoilRoot } from "recoil";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
 import "./globals.css";
 import Navbar from "./components/layout/Navbar";
 
@@ -21,12 +23,14 @@ export default function RootLayout({ children }: RootLayoutProps) {
         />
       </head>
       <body className="bg-secondary">
-        <QueryClientProvider client={queryClient}>
-          <section>
-            <Navbar />
-            <div className="px-5 lg:px-10 py-10">{children}</div>
-          </section>
-        </QueryClientProvider>
+        <RecoilRoot>
+          <QueryClientProvider client={queryClient}>
+            <section>
+              <Navbar />
+              <div className="px-5 lg:px-10 py-10">{children}</div>
+            </section>
+          </QueryClientProvider>
+        </RecoilRoot>
       </body>
     </html>
   );

@@ -38,7 +38,7 @@ export default function HomePage() {
               ))}
             </>
           ) : (
-            data?.map((item) => <ProductCard {...item} />)
+            data?.map((item) => <ProductCard key={item?.id} {...item} />)
           )}
         </div>
       </section>
