@@ -15,7 +15,22 @@ const ProductCard = (product: Product) => {
   const [cart, setCart] = useRecoilState(cartState);
 
   const addToCart = () => {
-    setCart((prev) => [...prev, id]);
+    let existing = cart?.find((item) => item?.id == id);
+    if (existing) {
+      setCart((prev) => {
+        return prev?.map((item) =>
+          item.id === id ? { ...item, quantity: item?.quantity + 1 } : item
+        );
+      });
+    } else {
+      setCart((prev) => [
+        ...prev,
+        {
+          id,
+          quantity: 1,
+        },
+      ]);
+    }
   };
   return (
     <Card className="w-full flex flex-col gap-0 rounded-sm">

@@ -29,7 +29,7 @@ const Navbar = () => {
             onClick={showCart}
             size={16}
           />
-          <span className="absolute bottom-3 left-3 text-xs">
+          <span className="absolute bottom-3 left-2 text-xs">
             {cart?.length ?? 0}
           </span>
         </div>
