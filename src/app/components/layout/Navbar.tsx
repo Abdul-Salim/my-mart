@@ -8,6 +8,7 @@ import Link from "next/link";
 const Navbar = () => {
   const router = useRouter();
   const cart = useRecoilValue(cartState);
+  console.log(cart.length);
 
   const showCart = () => {
     router.push("/cart");

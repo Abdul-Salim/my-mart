@@ -1,11 +1,16 @@
 "use client";
 
 import { ReactNode } from "react";
+import dynamic from "next/dynamic";
 import { RecoilRoot } from "recoil";
+
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import "./globals.css";
-import Navbar from "./components/layout/Navbar";
+
+const Navbar = dynamic(() => import("./components/layout/Navbar"), {
+  ssr: false,
+});
 
 const queryClient = new QueryClient();
 
