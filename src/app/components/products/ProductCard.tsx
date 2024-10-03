@@ -9,10 +9,12 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useRecoilState } from "recoil";
 import { cartState } from "@/app/recoil/cart/cartAtom";
+import { toast } from "react-toastify";
 
 const ProductCard = (product: Product) => {
   const { title = "", id = "", rating, image = "", price = 0 } = product;
   const [cart, setCart] = useRecoilState(cartState);
+  let alreadyInCart = cart?.find((item) => item?.id == id) ?? null;
 
   const addToCart = () => {
     let existing = cart?.find((item) => item?.id == id);
@@ -28,9 +30,11 @@ const ProductCard = (product: Product) => {
         {
           id,
           quantity: 1,
+          price: price ?? 0,
         },
       ]);
     }
+    toast.info("Added to cart");
   };
   return (
     <Card className="w-full flex flex-col gap-0 rounded-sm">
@@ -57,8 +61,13 @@ const ProductCard = (product: Product) => {
           <StarRating rating={rating?.rate ?? 0} count={rating?.count ?? 0} />
         </div>
         <div className="flex w-full justify-between gap-3 items-center px-5 flex-nowrap">
-          <Button className="w-full gap-2" onClick={addToCart}>
-            Add To Cart <FaShoppingCart />
+          <Button
+            disabled={alreadyInCart !== null}
+            className="w-full gap-2"
+            onClick={addToCart}
+          >
+            {alreadyInCart == null ? "Add To Cart" : "Added to cart"}
+            <FaShoppingCart />
           </Button>
           <Button className="w-full gap-2 bg-transparent hover:bg-transparent border text-primary">
             Wishlist

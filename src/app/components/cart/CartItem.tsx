@@ -10,20 +10,23 @@ import { FaMinus, FaPlus, FaRegHeart } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import { useRecoilState } from "recoil";
 import CartItemLoader from "../loaders/CartItemLoader";
+import { type CartItemInterface } from "@/app/types";
+import { useConfirmation } from "../common/confirm/Confirmation";
 
 const CartItem = ({
   id,
   quantity,
   price = 0,
 }: {
-  id: string;
+  id: string | null;
   quantity: number;
   price: number;
 }) => {
   const [cart, setCart] = useRecoilState(cartState);
+  const { open } = useConfirmation();
   const { data, isLoading } = useQuery({
     queryKey: ["cart-item", id],
-    queryFn: async () => getProductDetails(id),
+    queryFn: async () => getProductDetails(id as string),
   });
 
   const incrementQuantity = () => {
@@ -44,10 +47,23 @@ const CartItem = ({
     }
   };
 
+  const removeItem = () => {
+    open(
+      "Confirm Delete",
+      "Are you sure you want to remove this item from cart?",
+      () => {
+        let filtered = cart?.filter((item) => item?.id !== id);
+        setCart(filtered);
+      },
+      () => {},
+      null
+    );
+  };
+
   return isLoading ? (
     <CartItemLoader />
   ) : (
-    <Card>
+    <Card className="rounded-sm">
       <div className="flex flex-col lg:flex-row gap-3 justify-between w-full px-5 py-3">
         <div className="w-[70px] h-[100px] flex justify-between items-start">
           <Image
@@ -67,7 +83,10 @@ const CartItem = ({
               <FaRegHeart size={16} />
               Add To Wishlist
             </Button>
-            <Button className="gap-2 bg-transparent h-8 text-red-600 hover:bg-transparent shadow-none hover:underline">
+            <Button
+              onClick={removeItem}
+              className="gap-2 bg-transparent h-8 text-red-600 hover:bg-transparent shadow-none hover:underline"
+            >
               <IoClose size={16} />
               Remove
             </Button>
