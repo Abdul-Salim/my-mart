@@ -1,6 +1,6 @@
-import { cartState } from "@/app/recoil/cart/cartAtom";
+import { cartState, cartTotal } from "@/app/recoil/cart/cartAtom";
 import React from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { Card } from "@/components/ui/card";
 import { formatMoney } from "@/lib/utils";
 import { type CartItemInterface } from "@/app/types";
@@ -9,15 +9,9 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import Link from "next/link";
 
 const Cart = () => {
-  const [cart, setCart] = useRecoilState(cartState);
-  const getTotal = () => {
-    let sum = 0;
-    cart?.forEach((item) => {
-      console.log(item);
-      sum = item?.quantity && item?.price ? item?.quantity * item?.price : 0;
-    });
-    return sum;
-  };
+  const [cart] = useRecoilState(cartState);
+  const total = useRecoilValue(cartTotal);
+
   return (
     <div className="">
       <h2 className="text-lg font-bold mb-6">Shopping Cart</h2>
@@ -39,7 +33,7 @@ const Cart = () => {
             <h2 className="text-lg font-bold mb-6">Order Summary</h2>
             <div className="flex w-full justify-between">
               <p className="text-gray-500">Sub Total</p>
-              <p>{formatMoney(getTotal())}</p>
+              <p>{formatMoney(total)}</p>
             </div>
           </Card>
         </div>
